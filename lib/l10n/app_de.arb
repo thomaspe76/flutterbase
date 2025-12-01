@@ -1,0 +1,184 @@
+{
+  "@@locale": "de",
+
+  "appTitle": "FlutterBase",
+  "@appTitle": {
+    "description": "Der Titel der Anwendung"
+  },
+
+  "welcome": "Willkommen",
+  "@welcome": {
+    "description": "Willkommensnachricht"
+  },
+
+  "welcomeMessage": "Willkommen bei FlutterBase - Eine professionell strukturierte Flutter App",
+  "@welcomeMessage": {
+    "description": "Detaillierte Willkommensnachricht"
+  },
+
+  "home": "Startseite",
+  "@home": {
+    "description": "Startseite Label"
+  },
+
+  "settings": "Einstellungen",
+  "@settings": {
+    "description": "Einstellungen Label"
+  },
+
+  "profile": "Profil",
+  "@profile": {
+    "description": "Profil Label"
+  },
+
+  "signIn": "Anmelden",
+  "@signIn": {
+    "description": "Anmelden Button"
+  },
+
+  "signUp": "Registrieren",
+  "@signUp": {
+    "description": "Registrieren Button"
+  },
+
+  "signOut": "Abmelden",
+  "@signOut": {
+    "description": "Abmelden Button"
+  },
+
+  "email": "E-Mail",
+  "@email": {
+    "description": "E-Mail Feld"
+  },
+
+  "password": "Passwort",
+  "@password": {
+    "description": "Passwort Feld"
+  },
+
+  "confirmPassword": "Passwort bestätigen",
+  "@confirmPassword": {
+    "description": "Passwort bestätigen Feld"
+  },
+
+  "forgotPassword": "Passwort vergessen?",
+  "@forgotPassword": {
+    "description": "Passwort vergessen Link"
+  },
+
+  "save": "Speichern",
+  "@save": {
+    "description": "Speichern Button"
+  },
+
+  "cancel": "Abbrechen",
+  "@cancel": {
+    "description": "Abbrechen Button"
+  },
+
+  "delete": "Löschen",
+  "@delete": {
+    "description": "Löschen Button"
+  },
+
+  "edit": "Bearbeiten",
+  "@edit": {
+    "description": "Bearbeiten Button"
+  },
+
+  "search": "Suchen",
+  "@search": {
+    "description": "Suchen Label"
+  },
+
+  "loading": "Lädt...",
+  "@loading": {
+    "description": "Ladeindikator Text"
+  },
+
+  "error": "Fehler",
+  "@error": {
+    "description": "Fehler Label"
+  },
+
+  "success": "Erfolgreich",
+  "@success": {
+    "description": "Erfolg Label"
+  },
+
+  "retry": "Erneut versuchen",
+  "@retry": {
+    "description": "Erneut versuchen Button"
+  },
+
+  "noDataAvailable": "Keine Daten verfügbar",
+  "@noDataAvailable": {
+    "description": "Keine Daten Nachricht"
+  },
+
+  "somethingWentWrong": "Etwas ist schiefgelaufen",
+  "@somethingWentWrong": {
+    "description": "Generische Fehlermeldung"
+  },
+
+  "emailRequired": "E-Mail ist erforderlich",
+  "@emailRequired": {
+    "description": "E-Mail Validierungsfehler"
+  },
+
+  "emailInvalid": "Ungültige E-Mail-Adresse",
+  "@emailInvalid": {
+    "description": "E-Mail Format Fehler"
+  },
+
+  "passwordRequired": "Passwort ist erforderlich",
+  "@passwordRequired": {
+    "description": "Passwort Validierungsfehler"
+  },
+
+  "passwordTooShort": "Passwort muss mindestens {minLength} Zeichen lang sein",
+  "@passwordTooShort": {
+    "description": "Passwort Länge Fehler",
+    "placeholders": {
+      "minLength": {
+        "type": "int",
+        "example": "8"
+      }
+    }
+  },
+
+  "passwordsDoNotMatch": "Passwörter stimmen nicht überein",
+  "@passwordsDoNotMatch": {
+    "description": "Passwort Übereinstimmung Fehler"
+  },
+
+  "itemCount": "{count, plural, =0{Keine Einträge} =1{1 Eintrag} other{{count} Einträge}}",
+  "@itemCount": {
+    "description": "Anzahl der Einträge",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "language": "Sprache",
+  "@language": {
+    "description": "Sprache Label"
+  },
+
+  "theme": "Design",
+  "@theme": {
+    "description": "Design/Theme Label"
+  },
+
+  "darkMode": "Dunkelmodus",
+  "@darkMode": {
+    "description": "Dunkelmodus Label"
+  },
+
+  "lightMode": "Hellmodus",
+  "@lightMode": {
+    "description": "Hellmodus Label"
+  }
+}
