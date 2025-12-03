@@ -1,5 +1,5 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,78 +9,33 @@ part of 'settings_provider.dart';
 // FreezedGenerator
 // **************************************************************************
 
-// dart format off
 T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$SettingsState {
-  ThemeMode get themeMode;
-  bool get notificationsEnabled;
-  double get notificationLeadTime;
-  bool get cloudBackupEnabled;
-  bool get hapticsEnabled;
-  bool get animationsEnabled;
-  bool get biometricsEnabled;
-  bool get privacyModeEnabled;
-  int get themeColor;
+  ThemeMode get themeMode => throw _privateConstructorUsedError;
+  bool get notificationsEnabled => throw _privateConstructorUsedError;
+  double get notificationLeadTime => throw _privateConstructorUsedError;
+  bool get cloudBackupEnabled => throw _privateConstructorUsedError;
+  bool get hapticsEnabled => throw _privateConstructorUsedError;
+  bool get animationsEnabled => throw _privateConstructorUsedError;
+  bool get biometricsEnabled => throw _privateConstructorUsedError;
+  bool get privacyModeEnabled => throw _privateConstructorUsedError;
+  int get themeColor => throw _privateConstructorUsedError;
 
-  /// Create a copy of SettingsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
+  @JsonKey(ignore: true)
   $SettingsStateCopyWith<SettingsState> get copyWith =>
-      _$SettingsStateCopyWithImpl<SettingsState>(
-          this as SettingsState, _$identity);
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is SettingsState &&
-            (identical(other.themeMode, themeMode) ||
-                other.themeMode == themeMode) &&
-            (identical(other.notificationsEnabled, notificationsEnabled) ||
-                other.notificationsEnabled == notificationsEnabled) &&
-            (identical(other.notificationLeadTime, notificationLeadTime) ||
-                other.notificationLeadTime == notificationLeadTime) &&
-            (identical(other.cloudBackupEnabled, cloudBackupEnabled) ||
-                other.cloudBackupEnabled == cloudBackupEnabled) &&
-            (identical(other.hapticsEnabled, hapticsEnabled) ||
-                other.hapticsEnabled == hapticsEnabled) &&
-            (identical(other.animationsEnabled, animationsEnabled) ||
-                other.animationsEnabled == animationsEnabled) &&
-            (identical(other.biometricsEnabled, biometricsEnabled) ||
-                other.biometricsEnabled == biometricsEnabled) &&
-            (identical(other.privacyModeEnabled, privacyModeEnabled) ||
-                other.privacyModeEnabled == privacyModeEnabled) &&
-            (identical(other.themeColor, themeColor) ||
-                other.themeColor == themeColor));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      themeMode,
-      notificationsEnabled,
-      notificationLeadTime,
-      cloudBackupEnabled,
-      hapticsEnabled,
-      animationsEnabled,
-      biometricsEnabled,
-      privacyModeEnabled,
-      themeColor);
-
-  @override
-  String toString() {
-    return 'SettingsState(themeMode: $themeMode, notificationsEnabled: $notificationsEnabled, notificationLeadTime: $notificationLeadTime, cloudBackupEnabled: $cloudBackupEnabled, hapticsEnabled: $hapticsEnabled, animationsEnabled: $animationsEnabled, biometricsEnabled: $biometricsEnabled, privacyModeEnabled: $privacyModeEnabled, themeColor: $themeColor)';
-  }
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract mixin class $SettingsStateCopyWith<$Res> {
+abstract class $SettingsStateCopyWith<$Res> {
   factory $SettingsStateCopyWith(
-          SettingsState value, $Res Function(SettingsState) _then) =
-      _$SettingsStateCopyWithImpl;
+          SettingsState value, $Res Function(SettingsState) then) =
+      _$SettingsStateCopyWithImpl<$Res, SettingsState>;
   @useResult
   $Res call(
       {ThemeMode themeMode,
@@ -95,15 +50,15 @@ abstract mixin class $SettingsStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$SettingsStateCopyWithImpl<$Res>
+class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
     implements $SettingsStateCopyWith<$Res> {
-  _$SettingsStateCopyWithImpl(this._self, this._then);
+  _$SettingsStateCopyWithImpl(this._value, this._then);
 
-  final SettingsState _self;
-  final $Res Function(SettingsState) _then;
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
-  /// Create a copy of SettingsState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -117,261 +72,133 @@ class _$SettingsStateCopyWithImpl<$Res>
     Object? privacyModeEnabled = null,
     Object? themeColor = null,
   }) {
-    return _then(_self.copyWith(
+    return _then(_value.copyWith(
       themeMode: null == themeMode
-          ? _self.themeMode
+          ? _value.themeMode
           : themeMode // ignore: cast_nullable_to_non_nullable
               as ThemeMode,
       notificationsEnabled: null == notificationsEnabled
-          ? _self.notificationsEnabled
+          ? _value.notificationsEnabled
           : notificationsEnabled // ignore: cast_nullable_to_non_nullable
               as bool,
       notificationLeadTime: null == notificationLeadTime
-          ? _self.notificationLeadTime
+          ? _value.notificationLeadTime
           : notificationLeadTime // ignore: cast_nullable_to_non_nullable
               as double,
       cloudBackupEnabled: null == cloudBackupEnabled
-          ? _self.cloudBackupEnabled
+          ? _value.cloudBackupEnabled
           : cloudBackupEnabled // ignore: cast_nullable_to_non_nullable
               as bool,
       hapticsEnabled: null == hapticsEnabled
-          ? _self.hapticsEnabled
+          ? _value.hapticsEnabled
           : hapticsEnabled // ignore: cast_nullable_to_non_nullable
               as bool,
       animationsEnabled: null == animationsEnabled
-          ? _self.animationsEnabled
+          ? _value.animationsEnabled
           : animationsEnabled // ignore: cast_nullable_to_non_nullable
               as bool,
       biometricsEnabled: null == biometricsEnabled
-          ? _self.biometricsEnabled
+          ? _value.biometricsEnabled
           : biometricsEnabled // ignore: cast_nullable_to_non_nullable
               as bool,
       privacyModeEnabled: null == privacyModeEnabled
-          ? _self.privacyModeEnabled
+          ? _value.privacyModeEnabled
           : privacyModeEnabled // ignore: cast_nullable_to_non_nullable
               as bool,
       themeColor: null == themeColor
-          ? _self.themeColor
+          ? _value.themeColor
+          : themeColor // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SettingsStateImplCopyWith<$Res>
+    implements $SettingsStateCopyWith<$Res> {
+  factory _$$SettingsStateImplCopyWith(
+          _$SettingsStateImpl value, $Res Function(_$SettingsStateImpl) then) =
+      __$$SettingsStateImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {ThemeMode themeMode,
+      bool notificationsEnabled,
+      double notificationLeadTime,
+      bool cloudBackupEnabled,
+      bool hapticsEnabled,
+      bool animationsEnabled,
+      bool biometricsEnabled,
+      bool privacyModeEnabled,
+      int themeColor});
+}
+
+/// @nodoc
+class __$$SettingsStateImplCopyWithImpl<$Res>
+    extends _$SettingsStateCopyWithImpl<$Res, _$SettingsStateImpl>
+    implements _$$SettingsStateImplCopyWith<$Res> {
+  __$$SettingsStateImplCopyWithImpl(
+      _$SettingsStateImpl _value, $Res Function(_$SettingsStateImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? themeMode = null,
+    Object? notificationsEnabled = null,
+    Object? notificationLeadTime = null,
+    Object? cloudBackupEnabled = null,
+    Object? hapticsEnabled = null,
+    Object? animationsEnabled = null,
+    Object? biometricsEnabled = null,
+    Object? privacyModeEnabled = null,
+    Object? themeColor = null,
+  }) {
+    return _then(_$SettingsStateImpl(
+      themeMode: null == themeMode
+          ? _value.themeMode
+          : themeMode // ignore: cast_nullable_to_non_nullable
+              as ThemeMode,
+      notificationsEnabled: null == notificationsEnabled
+          ? _value.notificationsEnabled
+          : notificationsEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      notificationLeadTime: null == notificationLeadTime
+          ? _value.notificationLeadTime
+          : notificationLeadTime // ignore: cast_nullable_to_non_nullable
+              as double,
+      cloudBackupEnabled: null == cloudBackupEnabled
+          ? _value.cloudBackupEnabled
+          : cloudBackupEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      hapticsEnabled: null == hapticsEnabled
+          ? _value.hapticsEnabled
+          : hapticsEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      animationsEnabled: null == animationsEnabled
+          ? _value.animationsEnabled
+          : animationsEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      biometricsEnabled: null == biometricsEnabled
+          ? _value.biometricsEnabled
+          : biometricsEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      privacyModeEnabled: null == privacyModeEnabled
+          ? _value.privacyModeEnabled
+          : privacyModeEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      themeColor: null == themeColor
+          ? _value.themeColor
           : themeColor // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
 }
 
-/// Adds pattern-matching-related methods to [SettingsState].
-extension SettingsStatePatterns on SettingsState {
-  /// A variant of `map` that fallback to returning `orElse`.
-  ///
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case final Subclass value:
-  ///     return ...;
-  ///   case _:
-  ///     return orElse();
-  /// }
-  /// ```
-
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_SettingsState value)? $default, {
-    required TResult orElse(),
-  }) {
-    final _that = this;
-    switch (_that) {
-      case _SettingsState() when $default != null:
-        return $default(_that);
-      case _:
-        return orElse();
-    }
-  }
-
-  /// A `switch`-like method, using callbacks.
-  ///
-  /// Callbacks receives the raw object, upcasted.
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case final Subclass value:
-  ///     return ...;
-  ///   case final Subclass2 value:
-  ///     return ...;
-  /// }
-  /// ```
-
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_SettingsState value) $default,
-  ) {
-    final _that = this;
-    switch (_that) {
-      case _SettingsState():
-        return $default(_that);
-    }
-  }
-
-  /// A variant of `map` that fallback to returning `null`.
-  ///
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case final Subclass value:
-  ///     return ...;
-  ///   case _:
-  ///     return null;
-  /// }
-  /// ```
-
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_SettingsState value)? $default,
-  ) {
-    final _that = this;
-    switch (_that) {
-      case _SettingsState() when $default != null:
-        return $default(_that);
-      case _:
-        return null;
-    }
-  }
-
-  /// A variant of `when` that fallback to an `orElse` callback.
-  ///
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case Subclass(:final field):
-  ///     return ...;
-  ///   case _:
-  ///     return orElse();
-  /// }
-  /// ```
-
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(
-            ThemeMode themeMode,
-            bool notificationsEnabled,
-            double notificationLeadTime,
-            bool cloudBackupEnabled,
-            bool hapticsEnabled,
-            bool animationsEnabled,
-            bool biometricsEnabled,
-            bool privacyModeEnabled,
-            int themeColor)?
-        $default, {
-    required TResult orElse(),
-  }) {
-    final _that = this;
-    switch (_that) {
-      case _SettingsState() when $default != null:
-        return $default(
-            _that.themeMode,
-            _that.notificationsEnabled,
-            _that.notificationLeadTime,
-            _that.cloudBackupEnabled,
-            _that.hapticsEnabled,
-            _that.animationsEnabled,
-            _that.biometricsEnabled,
-            _that.privacyModeEnabled,
-            _that.themeColor);
-      case _:
-        return orElse();
-    }
-  }
-
-  /// A `switch`-like method, using callbacks.
-  ///
-  /// As opposed to `map`, this offers destructuring.
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case Subclass(:final field):
-  ///     return ...;
-  ///   case Subclass2(:final field2):
-  ///     return ...;
-  /// }
-  /// ```
-
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(
-            ThemeMode themeMode,
-            bool notificationsEnabled,
-            double notificationLeadTime,
-            bool cloudBackupEnabled,
-            bool hapticsEnabled,
-            bool animationsEnabled,
-            bool biometricsEnabled,
-            bool privacyModeEnabled,
-            int themeColor)
-        $default,
-  ) {
-    final _that = this;
-    switch (_that) {
-      case _SettingsState():
-        return $default(
-            _that.themeMode,
-            _that.notificationsEnabled,
-            _that.notificationLeadTime,
-            _that.cloudBackupEnabled,
-            _that.hapticsEnabled,
-            _that.animationsEnabled,
-            _that.biometricsEnabled,
-            _that.privacyModeEnabled,
-            _that.themeColor);
-    }
-  }
-
-  /// A variant of `when` that fallback to returning `null`
-  ///
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case Subclass(:final field):
-  ///     return ...;
-  ///   case _:
-  ///     return null;
-  /// }
-  /// ```
-
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(
-            ThemeMode themeMode,
-            bool notificationsEnabled,
-            double notificationLeadTime,
-            bool cloudBackupEnabled,
-            bool hapticsEnabled,
-            bool animationsEnabled,
-            bool biometricsEnabled,
-            bool privacyModeEnabled,
-            int themeColor)?
-        $default,
-  ) {
-    final _that = this;
-    switch (_that) {
-      case _SettingsState() when $default != null:
-        return $default(
-            _that.themeMode,
-            _that.notificationsEnabled,
-            _that.notificationLeadTime,
-            _that.cloudBackupEnabled,
-            _that.hapticsEnabled,
-            _that.animationsEnabled,
-            _that.biometricsEnabled,
-            _that.privacyModeEnabled,
-            _that.themeColor);
-      case _:
-        return null;
-    }
-  }
-}
-
 /// @nodoc
 
-class _SettingsState implements SettingsState {
-  const _SettingsState(
+class _$SettingsStateImpl implements _SettingsState {
+  const _$SettingsStateImpl(
       {this.themeMode = ThemeMode.system,
       this.notificationsEnabled = true,
       this.notificationLeadTime = 15.0,
@@ -410,19 +237,16 @@ class _SettingsState implements SettingsState {
   @JsonKey()
   final int themeColor;
 
-  /// Create a copy of SettingsState
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$SettingsStateCopyWith<_SettingsState> get copyWith =>
-      __$SettingsStateCopyWithImpl<_SettingsState>(this, _$identity);
+  String toString() {
+    return 'SettingsState(themeMode: $themeMode, notificationsEnabled: $notificationsEnabled, notificationLeadTime: $notificationLeadTime, cloudBackupEnabled: $cloudBackupEnabled, hapticsEnabled: $hapticsEnabled, animationsEnabled: $animationsEnabled, biometricsEnabled: $biometricsEnabled, privacyModeEnabled: $privacyModeEnabled, themeColor: $themeColor)';
+  }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _SettingsState &&
+            other is _$SettingsStateImpl &&
             (identical(other.themeMode, themeMode) ||
                 other.themeMode == themeMode) &&
             (identical(other.notificationsEnabled, notificationsEnabled) ||
@@ -456,94 +280,45 @@ class _SettingsState implements SettingsState {
       privacyModeEnabled,
       themeColor);
 
-  @override
-  String toString() {
-    return 'SettingsState(themeMode: $themeMode, notificationsEnabled: $notificationsEnabled, notificationLeadTime: $notificationLeadTime, cloudBackupEnabled: $cloudBackupEnabled, hapticsEnabled: $hapticsEnabled, animationsEnabled: $animationsEnabled, biometricsEnabled: $biometricsEnabled, privacyModeEnabled: $privacyModeEnabled, themeColor: $themeColor)';
-  }
-}
-
-/// @nodoc
-abstract mixin class _$SettingsStateCopyWith<$Res>
-    implements $SettingsStateCopyWith<$Res> {
-  factory _$SettingsStateCopyWith(
-          _SettingsState value, $Res Function(_SettingsState) _then) =
-      __$SettingsStateCopyWithImpl;
-  @override
-  @useResult
-  $Res call(
-      {ThemeMode themeMode,
-      bool notificationsEnabled,
-      double notificationLeadTime,
-      bool cloudBackupEnabled,
-      bool hapticsEnabled,
-      bool animationsEnabled,
-      bool biometricsEnabled,
-      bool privacyModeEnabled,
-      int themeColor});
-}
-
-/// @nodoc
-class __$SettingsStateCopyWithImpl<$Res>
-    implements _$SettingsStateCopyWith<$Res> {
-  __$SettingsStateCopyWithImpl(this._self, this._then);
-
-  final _SettingsState _self;
-  final $Res Function(_SettingsState) _then;
-
-  /// Create a copy of SettingsState
-  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  $Res call({
-    Object? themeMode = null,
-    Object? notificationsEnabled = null,
-    Object? notificationLeadTime = null,
-    Object? cloudBackupEnabled = null,
-    Object? hapticsEnabled = null,
-    Object? animationsEnabled = null,
-    Object? biometricsEnabled = null,
-    Object? privacyModeEnabled = null,
-    Object? themeColor = null,
-  }) {
-    return _then(_SettingsState(
-      themeMode: null == themeMode
-          ? _self.themeMode
-          : themeMode // ignore: cast_nullable_to_non_nullable
-              as ThemeMode,
-      notificationsEnabled: null == notificationsEnabled
-          ? _self.notificationsEnabled
-          : notificationsEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      notificationLeadTime: null == notificationLeadTime
-          ? _self.notificationLeadTime
-          : notificationLeadTime // ignore: cast_nullable_to_non_nullable
-              as double,
-      cloudBackupEnabled: null == cloudBackupEnabled
-          ? _self.cloudBackupEnabled
-          : cloudBackupEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      hapticsEnabled: null == hapticsEnabled
-          ? _self.hapticsEnabled
-          : hapticsEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      animationsEnabled: null == animationsEnabled
-          ? _self.animationsEnabled
-          : animationsEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      biometricsEnabled: null == biometricsEnabled
-          ? _self.biometricsEnabled
-          : biometricsEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      privacyModeEnabled: null == privacyModeEnabled
-          ? _self.privacyModeEnabled
-          : privacyModeEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      themeColor: null == themeColor
-          ? _self.themeColor
-          : themeColor // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
-  }
+  _$$SettingsStateImplCopyWith<_$SettingsStateImpl> get copyWith =>
+      __$$SettingsStateImplCopyWithImpl<_$SettingsStateImpl>(this, _$identity);
 }
 
-// dart format on
+abstract class _SettingsState implements SettingsState {
+  const factory _SettingsState(
+      {final ThemeMode themeMode,
+      final bool notificationsEnabled,
+      final double notificationLeadTime,
+      final bool cloudBackupEnabled,
+      final bool hapticsEnabled,
+      final bool animationsEnabled,
+      final bool biometricsEnabled,
+      final bool privacyModeEnabled,
+      final int themeColor}) = _$SettingsStateImpl;
+
+  @override
+  ThemeMode get themeMode;
+  @override
+  bool get notificationsEnabled;
+  @override
+  double get notificationLeadTime;
+  @override
+  bool get cloudBackupEnabled;
+  @override
+  bool get hapticsEnabled;
+  @override
+  bool get animationsEnabled;
+  @override
+  bool get biometricsEnabled;
+  @override
+  bool get privacyModeEnabled;
+  @override
+  int get themeColor;
+  @override
+  @JsonKey(ignore: true)
+  _$$SettingsStateImplCopyWith<_$SettingsStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

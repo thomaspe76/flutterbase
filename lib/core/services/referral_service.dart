@@ -1,54 +1,79 @@
+// ignore_for_file: deprecated_member_use
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:android_play_install_referrer/android_play_install_referrer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-/// Service für Referral-/Empfehlungssystem via Play Store Install Referrer.
+/// Referral-Service für Empfehlungsprogramme.
 ///
-/// Funktionsweise Android:
-/// 1. User teilt Link: play.google.com/store/apps/details?id=com.app&referrer=ref_USER123
-/// 2. Neuer User installiert App
-/// 3. App liest Referrer beim ersten Start aus
-/// 4. Referral wird in Firestore gespeichert
-///
-/// iOS: Benötigt Firebase Dynamic Links oder eigenen Redirect-Service
+/// Android: Play Store Install Referrer (kostenlos, nativ)
+/// iOS: Firebase Dynamic Links (benötigt Konfiguration)
 class ReferralService {
   final FirebaseFirestore _firestore;
+  final FirebaseDynamicLinks _dynamicLinks;
 
-  /// Maximale Anzahl Referral-Belohnungen pro User
   final int maxRewards;
-
-  /// Belohnungsdauer in Tagen (z.B. 7 Tage Premium)
   final int rewardDays;
-
-  /// Firestore Collection Name
   final String collectionName;
+
+  // Für Dynamic Links (iOS)
+  final String? dynamicLinkDomain; // z.B. 'yourapp.page.link'
+  final String? iosBundleId;
+  final String? iosAppStoreId;
+  final String? androidPackageName;
 
   ReferralService({
     FirebaseFirestore? firestore,
+    FirebaseDynamicLinks? dynamicLinks,
     this.maxRewards = 3,
     this.rewardDays = 7,
     this.collectionName = 'referrals',
-  }) : _firestore = firestore ?? FirebaseFirestore.instance;
+    this.dynamicLinkDomain,
+    this.iosBundleId,
+    this.iosAppStoreId,
+    this.androidPackageName,
+  })  : _firestore = firestore ?? FirebaseFirestore.instance,
+        _dynamicLinks = dynamicLinks ?? FirebaseDynamicLinks.instance;
 
-  /// Generiert den Referral-Link für einen User
+  // === LINK GENERATION ===
+
+  /// Generiert Referral-Link
   Future<String> generateReferralLink(String userId) async {
     final packageInfo = await PackageInfo.fromPlatform();
-    final packageName = packageInfo.packageName;
+    final packageName = androidPackageName ?? packageInfo.packageName;
 
+    // Android: Direkter Play Store Link mit Referrer
     if (Platform.isAndroid) {
-      // Play Store Link mit Referrer-Parameter
       return 'https://play.google.com/store/apps/details?id=$packageName&referrer=ref_$userId';
     }
 
-    // iOS: Platzhalter - muss mit Dynamic Links oder eigenem Service implementiert werden
-    // return 'https://yourapp.page.link/invite?ref=$userId';
-    return 'https://apps.apple.com/app/id[APP_ID]';
+    // iOS: Firebase Dynamic Link
+    if (Platform.isIOS && dynamicLinkDomain != null) {
+      try {
+        final parameters = DynamicLinkParameters(
+          uriPrefix: 'https://$dynamicLinkDomain',
+          link: Uri.parse('https://$dynamicLinkDomain/refer?ref=$userId'),
+          androidParameters: AndroidParameters(packageName: packageName),
+          iosParameters: IOSParameters(
+            bundleId: iosBundleId ?? packageName,
+            appStoreId: iosAppStoreId,
+          ),
+        );
+        final shortLink = await _dynamicLinks.buildShortLink(parameters);
+        return shortLink.shortUrl.toString();
+      } catch (e) {
+        debugPrint('[ReferralService] Dynamic Link failed: $e');
+      }
+    }
+
+    // Fallback
+    return 'https://apps.apple.com/app/id${iosAppStoreId ?? "APP_ID"}';
   }
 
-  /// Teilt den Referral-Link mit System-Share-Dialog
+  /// Teilt Referral-Link
   Future<void> shareReferralLink({
     required String userId,
     required String shareText,
@@ -56,95 +81,110 @@ class ReferralService {
   }) async {
     final link = await generateReferralLink(userId);
     final text = shareText.replaceAll('{link}', link);
-
-    await Share.share(
-      text,
-      subject: subject,
-    );
+    await Share.share(text, subject: subject);
   }
 
-  /// Prüft beim App-Start ob ein Install-Referrer vorhanden ist (nur Android)
-  /// Sollte einmalig nach User-Registrierung/Login aufgerufen werden
-  Future<String?> checkAndProcessInstallReferrer(String currentUserId) async {
-    if (!Platform.isAndroid) return null;
+  // === REFERRER DETECTION ===
 
-    try {
-      final referrerDetails = await AndroidPlayInstallReferrer.installReferrer;
-      if (referrerDetails.installReferrer == null) return null;
+  /// Prüft Install Referrer (Android) oder Dynamic Link (iOS)
+  Future<String?> checkAndProcessReferrer(String currentUserId) async {
+    String? referrerId;
 
-      final referrerString = referrerDetails.installReferrer!;
-      debugPrint('[ReferralService] Install Referrer: $referrerString');
+    if (Platform.isAndroid) {
+      referrerId = await _checkAndroidReferrer();
+    } else if (Platform.isIOS) {
+      referrerId = await _checkIOSDynamicLink();
+    }
 
-      String? referrerId;
-
-      // Parse: "ref_USER_ID" oder "ref_USER_ID&utm_source=..."
-      if (referrerString.contains('ref_')) {
-        final match =
-            RegExp(r'ref_([a-zA-Z0-9_-]+)').firstMatch(referrerString);
-        referrerId = match?.group(1);
-      }
-
-      // Validierung: Nicht sich selbst referrieren
-      if (referrerId != null &&
-          referrerId.isNotEmpty &&
-          referrerId != currentUserId) {
-        final processed = await _processReferral(referrerId, currentUserId);
-        return processed ? referrerId : null;
-      }
-    } catch (e) {
-      debugPrint('[ReferralService] Error: $e');
+    if (referrerId != null && referrerId != currentUserId) {
+      final success = await _processReferral(referrerId, currentUserId);
+      return success ? referrerId : null;
     }
 
     return null;
   }
 
+  Future<String?> _checkAndroidReferrer() async {
+    try {
+      final details = await AndroidPlayInstallReferrer.installReferrer;
+      if (details.installReferrer == null) return null;
+
+      final referrer = details.installReferrer!;
+      debugPrint('[ReferralService] Android referrer: $referrer');
+
+      // Parse: ref_USER_ID
+      final match = RegExp(r'ref_([a-zA-Z0-9_-]+)').firstMatch(referrer);
+      return match?.group(1);
+    } catch (e) {
+      debugPrint('[ReferralService] Android referrer error: $e');
+      return null;
+    }
+  }
+
+  Future<String?> _checkIOSDynamicLink() async {
+    try {
+      final initialLink = await _dynamicLinks.getInitialLink();
+      if (initialLink == null) return null;
+
+      final uri = initialLink.link;
+      debugPrint('[ReferralService] iOS dynamic link: $uri');
+
+      return uri.queryParameters['ref'];
+    } catch (e) {
+      debugPrint('[ReferralService] iOS dynamic link error: $e');
+      return null;
+    }
+  }
+
+  // === REFERRAL PROCESSING ===
+
   Future<bool> _processReferral(String referrerId, String newUserId) async {
     try {
-      // Prüfen ob Referral bereits verarbeitet wurde
-      final existingReferral = await _firestore
+      // Bereits verarbeitet?
+      final existing = await _firestore
           .collection(collectionName)
           .where('newUserId', isEqualTo: newUserId)
           .limit(1)
           .get();
 
-      if (existingReferral.docs.isNotEmpty) {
-        debugPrint('[ReferralService] Already processed for user');
+      if (existing.docs.isNotEmpty) {
+        debugPrint('[ReferralService] Already processed');
         return false;
       }
 
-      // Prüfen ob Referrer max Rewards erreicht hat
-      final referrerRewards = await _firestore
+      // Max Rewards erreicht?
+      final rewards = await _firestore
           .collection(collectionName)
           .where('referrerId', isEqualTo: referrerId)
           .where('status', isEqualTo: 'completed')
           .get();
 
-      if (referrerRewards.docs.length >= maxRewards) {
-        debugPrint('[ReferralService] Referrer reached max rewards');
+      if (rewards.docs.length >= maxRewards) {
+        debugPrint('[ReferralService] Max rewards reached');
         return false;
       }
 
-      // Referral speichern
+      // Speichern
       await _firestore.collection(collectionName).add({
         'referrerId': referrerId,
         'newUserId': newUserId,
         'createdAt': FieldValue.serverTimestamp(),
-        'status': 'pending', // pending -> completed (nach Reward-Vergabe)
+        'status': 'pending',
         'platform': Platform.operatingSystem,
         'rewardDays': rewardDays,
       });
 
-      debugPrint(
-          '[ReferralService] Referral recorded: $referrerId -> $newUserId');
+      debugPrint('[ReferralService] Recorded: $referrerId → $newUserId');
       return true;
     } catch (e) {
-      debugPrint('[ReferralService] Error processing: $e');
+      debugPrint('[ReferralService] Process error: $e');
       return false;
     }
   }
 
-  /// Holt die Anzahl abgeschlossener Referrals für einen User
-  Future<int> getCompletedReferralCount(String userId) async {
+  // === QUERIES ===
+
+  Future<int> getCompletedCount(String userId) async {
     final snapshot = await _firestore
         .collection(collectionName)
         .where('referrerId', isEqualTo: userId)
@@ -153,24 +193,12 @@ class ReferralService {
     return snapshot.docs.length;
   }
 
-  /// Holt alle Referrals für einen User (als Referrer)
-  Future<List<Map<String, dynamic>>> getReferrals(String userId) async {
-    final snapshot = await _firestore
-        .collection(collectionName)
-        .where('referrerId', isEqualTo: userId)
-        .orderBy('createdAt', descending: true)
-        .get();
-
-    return snapshot.docs
-        .map((doc) => {
-              'id': doc.id,
-              ...doc.data(),
-            })
-        .toList();
+  Future<bool> canReceiveReward(String userId) async {
+    final count = await getCompletedCount(userId);
+    return count < maxRewards;
   }
 
-  /// Stream für Echtzeit-Updates der Referrals
-  Stream<QuerySnapshot> listenForReferrals(String userId) {
+  Stream<QuerySnapshot<Map<String, dynamic>>> watchReferrals(String userId) {
     return _firestore
         .collection(collectionName)
         .where('referrerId', isEqualTo: userId)
@@ -178,17 +206,10 @@ class ReferralService {
         .snapshots();
   }
 
-  /// Markiert Referral als abgeschlossen (nach Reward-Vergabe)
-  Future<void> completeReferral(String referralDocId) async {
-    await _firestore.collection(collectionName).doc(referralDocId).update({
+  Future<void> completeReferral(String docId) async {
+    await _firestore.collection(collectionName).doc(docId).update({
       'status': 'completed',
       'completedAt': FieldValue.serverTimestamp(),
     });
-  }
-
-  /// Prüft ob User noch Referral-Rewards erhalten kann
-  Future<bool> canReceiveReward(String userId) async {
-    final count = await getCompletedReferralCount(userId);
-    return count < maxRewards;
   }
 }

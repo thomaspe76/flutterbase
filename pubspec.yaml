@@ -9,56 +9,94 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_riverpod: ^3.0.3
-  riverpod_annotation: ^3.0.3
-  go_router: ^17.0.0
-  google_fonts: ^6.1.0
-  flutter_animate: ^4.5.0
-  url_launcher: ^6.2.2
-  package_info_plus: ^9.0.0
-  shared_preferences: ^2.2.2
-  cupertino_icons: ^1.0.2
   flutter_localizations:
     sdk: flutter
-  intl: ^0.20.2
-  dio: ^5.0.0
-  flutter_secure_storage: ^10.0.0-beta.5
-  local_auth: ^3.0.0
-  purchases_flutter: ^9.9.9
-  google_mobile_ads: ^6.0.0
-  supabase_flutter: ^2.10.3
-  google_generative_ai: ^0.4.7
-  sentry_flutter: ^9.8.0
-  in_app_review: ^2.0.11
-  freezed_annotation: ^3.1.0
-  dynamic_color: ^1.8.1
-  fl_chart: ^1.1.1
-  workmanager: ^0.9.0+3
-  flutter_local_notifications: ^19.5.0
 
-  # Local Storage
+  # === STATE MANAGEMENT ===
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+
+  # === NAVIGATION ===
+  go_router: ^14.2.0
+
+  # === DEPENDENCY INJECTION ===
+  get_it: ^7.7.0
+  injectable: ^2.4.2
+
+  # === FIREBASE ===
+  firebase_core: ^3.3.0
+  firebase_auth: ^5.1.4
+  cloud_firestore: ^5.2.1
+  firebase_analytics: ^11.2.1
+  firebase_crashlytics: ^4.0.4
+  firebase_remote_config: ^5.0.4
+  firebase_dynamic_links: ^6.0.4
+  firebase_storage: ^12.1.3
+
+  # === NETWORK ===
+  dio: ^5.5.0+1
+  retrofit: ^4.1.0
+  connectivity_plus: ^6.0.3
+
+  # === LOCAL STORAGE ===
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  path_provider: ^2.1.1
+  path_provider: ^2.1.3
+  flutter_secure_storage: ^9.2.2
+  shared_preferences: ^2.2.3
 
-  # Referral System
+  # === MONETARISIERUNG ===
+  purchases_flutter: ^8.1.0
+  google_mobile_ads: ^5.1.0
+
+  # === REFERRAL ===
   android_play_install_referrer: ^0.4.0
-  share_plus: ^7.2.2
-  cloud_firestore: ^5.4.4
+  share_plus: ^9.0.0
 
-  # Utilities
-  uuid: ^4.2.1
-  connectivity_plus: ^5.0.2
+  # === UTILITIES ===
+  freezed_annotation: ^2.4.3
+  json_annotation: ^4.9.0
+  equatable: ^2.0.5
+  fpdart: ^1.1.0
+  intl: ^0.20.2
+  logger: ^2.3.0
+  uuid: ^4.4.2
+  package_info_plus: ^8.0.0
+  permission_handler: ^11.3.1
+  url_launcher: ^6.3.0
+
+  # === UI ===
   flutter_dotenv: ^5.1.0
+  cached_network_image: ^3.3.1
+  shimmer: ^3.0.0
+  flutter_animate: ^4.5.0
+  google_fonts: ^6.1.0
+  
+  # === LEGACY / RESTORED ===
+  google_generative_ai: ^0.4.0
+  supabase_flutter: ^2.5.0
+  in_app_review: ^2.0.0
+  local_auth: ^2.2.0
+  flutter_local_notifications: ^17.0.0
+
+  # === ACCESSIBILITY ===
+  accessibility_tools: ^2.7.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
-  riverpod_generator: ^3.0.3
-  build_runner: ^2.4.8
-  custom_lint: ^0.8.0
-  riverpod_lint: ^3.0.3
-  freezed: ^3.2.3
+  flutter_lints: ^4.0.0
+
+  # === CODE GENERATION ===
+  build_runner: ^2.4.11
+  freezed: ^2.5.2
+  json_serializable: ^6.8.0
+  riverpod_generator: ^2.4.0
+  injectable_generator: ^2.6.1
+  retrofit_generator: ^8.1.2
+
+  # HINWEIS: hive_generator entfernt wegen Konflikt mit freezed 3.x
+  # TypeAdapter werden manuell geschrieben
 
 flutter:
   uses-material-design: true

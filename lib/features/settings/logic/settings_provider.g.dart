@@ -6,55 +6,20 @@ part of 'settings_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-// GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: type=lint, type=warning
-
-@ProviderFor(Settings)
-const settingsProvider = SettingsProvider._();
-
-final class SettingsProvider
-    extends $NotifierProvider<Settings, SettingsState> {
-  const SettingsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'settingsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
-
-  @override
-  String debugGetCreateSourceHash() => _$settingsHash();
-
-  @$internal
-  @override
-  Settings create() => Settings();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(SettingsState value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<SettingsState>(value),
-    );
-  }
-}
-
 String _$settingsHash() => r'84b39a1577e0f04696cbe0519615690e56ac4feb';
 
-abstract class _$Settings extends $Notifier<SettingsState> {
-  SettingsState build();
-  @$mustCallSuper
-  @override
-  void runBuild() {
-    final created = build();
-    final ref = this.ref as $Ref<SettingsState, SettingsState>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<SettingsState, SettingsState>,
-        SettingsState,
-        Object?,
-        Object?>;
-    element.handleValue(ref, created);
-  }
-}
+/// See also [Settings].
+@ProviderFor(Settings)
+final settingsProvider =
+    AutoDisposeNotifierProvider<Settings, SettingsState>.internal(
+  Settings.new,
+  name: r'settingsProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$settingsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$Settings = AutoDisposeNotifier<SettingsState>;
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

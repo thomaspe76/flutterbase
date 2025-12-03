@@ -65,7 +65,7 @@ class _WelcomeCardState extends ConsumerState<WelcomeCard> {
                     child: ScaleTransition(
                       scale: Tween<double>(begin: 0.95, end: 1.0).animate(
                         CurvedAnimation(
-                            parent: animation, curve: Curves.easeOut),
+                            parent: animation, curve: Curves.easeOut,),
                       ),
                       child: child,
                     ),
@@ -153,7 +153,7 @@ class _WelcomeCardState extends ConsumerState<WelcomeCard> {
                         transitionBuilder:
                             (Widget child, Animation<double> animation) {
                           return ScaleTransition(
-                              scale: animation, child: child);
+                              scale: animation, child: child,);
                         },
                         child: _isActionCompleted
                             ? Container(
@@ -170,7 +170,7 @@ class _WelcomeCardState extends ConsumerState<WelcomeCard> {
                                     color: theme
                                             .extension<SemanticColors>()
                                             ?.onSuccess ??
-                                        Colors.white),
+                                        Colors.white,),
                               )
                             : FilledButton.icon(
                                 key: const ValueKey('action'),

@@ -247,7 +247,7 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   Widget _buildSectionHeader(BuildContext context, String title,
-      {bool isDestructive = false}) {
+      {bool isDestructive = false,}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
       child: Text(

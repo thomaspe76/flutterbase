@@ -165,15 +165,15 @@ class _InteractiveSliderState extends ConsumerState<InteractiveSlider> {
                 Text(l10n.sliderLow,
                     style: TextStyle(
                         fontSize: 12,
-                        color: theme.colorScheme.onSurfaceVariant)),
+                        color: theme.colorScheme.onSurfaceVariant,),),
                 Text(l10n.sliderMed,
                     style: TextStyle(
                         fontSize: 12,
-                        color: theme.colorScheme.onSurfaceVariant)),
+                        color: theme.colorScheme.onSurfaceVariant,),),
                 Text(l10n.sliderHigh,
                     style: TextStyle(
                         fontSize: 12,
-                        color: theme.colorScheme.onSurfaceVariant)),
+                        color: theme.colorScheme.onSurfaceVariant,),),
               ],
             ),
           ],

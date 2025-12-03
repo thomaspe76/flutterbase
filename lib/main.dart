@@ -1,120 +1,102 @@
-import 'package:dynamic_color/dynamic_color.dart';
+import 'dart:async';
+import 'package:accessibility_tools/accessibility_tools.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutterbase/l10n/app_localizations.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:flutterbase/core/config/env_config.dart';
-import 'core/router/app_router.dart';
-import 'core/theme/app_theme.dart';
-import 'core/security/privacy_guard.dart';
-import 'core/network/supabase_provider.dart';
-import 'features/settings/logic/settings_provider.dart';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutterbase/core/services/hive_service.dart';
-import 'package:flutterbase/core/services/ad_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'core/design_system/app_theme.dart';
+import 'core/di/injection.dart';
+import 'core/routing/app_router.dart';
+import 'core/services/hive_service.dart';
+import 'core/services/ad_service.dart';
+import 'core/services/feature_flag_service.dart';
+import 'firebase_options.dart';
+import 'l10n/app_localizations.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
 
-  // 1. Environment Variables
-  try {
-    await dotenv.load(fileName: ".env");
-    EnvConfig.init(
-      environment: dotenv.env['ENVIRONMENT'] == 'prod'
-          ? Environment.prod
-          : Environment.dev,
-      apiBaseUrl: dotenv.env['API_BASE_URL'] ?? '',
-      supabaseUrl: dotenv.env['SUPABASE_URL'] ?? '',
-      supabaseAnonKey: dotenv.env['SUPABASE_ANON_KEY'] ?? '',
-      geminiApiKey: dotenv.env['GEMINI_API_KEY'] ?? '',
-      sentryDsn: dotenv.env['SENTRY_DSN'] ?? '',
-      enableLogging: dotenv.env['ENABLE_LOGGING'] == 'true',
-    );
-  } catch (e) {
-    debugPrint('[Main] No .env file found or init failed: $e');
-    // Fallback init
-    EnvConfig.init(
-      environment: Environment.dev,
-      apiBaseUrl: '',
-      supabaseUrl: '',
-      supabaseAnonKey: '',
-      geminiApiKey: '',
-      sentryDsn: '',
-    );
-  }
+    // 1. Environment
+    try {
+      await dotenv.load(fileName: ".env");
+    } catch (e) {
+      debugPrint('[Main] No .env file');
+    }
 
-  // 2. Hive (Local Storage)
-  await HiveService.initialize();
+    // 2. Firebase + Crashlytics
+    try {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
 
-  // 3. AdMob
-  await AdService.initialize();
+      // Crashlytics Error Handler
+      FlutterError.onError = (details) {
+        FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+      };
+      PlatformDispatcher.instance.onError = (error, stack) {
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+        return true;
+      };
 
-  final container = ProviderContainer();
-  await container.read(initializeSupabaseProvider.future);
+      debugPrint('[Main] Firebase initialized');
+    } catch (e) {
+      debugPrint('[Main] Firebase failed: $e');
+    }
 
-  await SentryFlutter.init(
-    (options) {
-      options.dsn = EnvConfig.instance.sentryDsn;
-      options.tracesSampleRate = 1.0;
-      options.environment = EnvConfig.instance.environment.name;
-    },
-    appRunner: () => runApp(
-      const ProviderScope(
-        child: PrivacyGuard(
-          child: MainApp(),
-        ),
+    // 3. Hive
+    await HiveService.initialize();
+
+    // 4. AdMob
+    await AdService.initialize();
+
+    // 5. Feature Flags
+    final featureFlagService = FeatureFlagService();
+    await featureFlagService.initialize();
+
+    // 6. Dependency Injection
+    await initializeDependencies();
+
+    // 7. Run App
+    runApp(
+      ProviderScope(
+        overrides: [
+          featureFlagServiceProvider.overrideWithValue(featureFlagService),
+        ],
+        child: const FlutterBaseApp(),
       ),
-    ),
-  );
-
-  // Edge-to-Edge System UI
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    systemNavigationBarColor: Colors.transparent,
-    statusBarColor: Colors.transparent,
-  ));
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    );
+  }, (error, stack) {
+    debugPrint('[Main] Uncaught: $error');
+    if (Firebase.apps.isNotEmpty) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    }
+  });
 }
 
-class MainApp extends ConsumerWidget {
-  const MainApp({super.key});
+class FlutterBaseApp extends StatelessWidget {
+  const FlutterBaseApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final router = ref.watch(routerProvider);
-    final settings = ref.watch(settingsProvider);
-
-    return DynamicColorBuilder(
-      builder: (lightDynamic, darkDynamic) {
-        return PrivacyGuard(
-          enabled: settings.privacyModeEnabled,
-          child: MaterialApp.router(
-            title: 'Flutter Boilerplate',
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: const [
-              Locale('en'),
-              Locale('de'),
-            ],
-            theme: AppTheme.lightTheme(
-              Color(settings.themeColor),
-              dynamicColorScheme: lightDynamic,
-            ),
-            darkTheme: AppTheme.darkTheme(
-              Color(settings.themeColor),
-              dynamicColorScheme: darkDynamic,
-            ),
-            themeMode: settings.themeMode,
-            routerConfig: router,
-            debugShowCheckedModeBanner: false,
-          ),
-        );
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      title: 'FlutterBase',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: const Locale('de'),
+      routerConfig: AppRouter.router,
+      builder: (context, child) {
+        if (kDebugMode) {
+          return AccessibilityTools(child: child);
+        }
+        return child ?? const SizedBox.shrink();
       },
     );
   }

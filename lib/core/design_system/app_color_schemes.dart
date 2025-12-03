@@ -1,59 +1,55 @@
 import 'package:flutter/material.dart';
 
-/// Vordefinierte Farbschemata für verschiedene App-Typen.
-///
-/// Verwendung:
-/// 1. Schema wählen: final colors = AppColorSchemes.finance;
-/// 2. In AppColors übernehmen oder direkt verwenden
+/// Vordefinierte Farbschemata für verschiedene App-Kategorien.
 ///
 /// Farbpsychologie:
-/// - Emerald/Grün: Geld, Wachstum, Erfolg (Finance, Health)
-/// - Blue: Vertrauen, Stabilität, Professionalität (Business, Tech)
-/// - Purple/Indigo: Premium, Kreativität, Luxus (Premium Features)
-/// - Orange/Amber: Energie, Warnung, Aufmerksamkeit (CTA, Alerts)
-/// - Red: Dringlichkeit, Fehler, Stop (Errors, Limits)
+/// - Emerald: Geld, Wachstum, Erfolg (Finance, Health)
+/// - Blue: Vertrauen, Stabilität, Professionalität (Business, Productivity)
+/// - Indigo/Purple: Premium, Kreativität, Luxus (Pro Features)
+/// - Amber: Energie, Warnung (CTAs, Alerts)
+/// - Red: Dringlichkeit, Fehler (Errors, Limits)
 abstract class AppColorSchemes {
-  /// Finance/Budget Apps - Emerald + Slate
+  // === FINANCE (Emerald + Slate) ===
   static const finance = (
-    primary: Color(0xFF10B981), // Emerald 500
-    primaryLight: Color(0xFF34D399), // Emerald 400
-    primaryDark: Color(0xFF059669), // Emerald 600
-    primarySurface: Color(0xFFD1FAE5), // Emerald 100
-    secondary: Color(0xFF6366F1), // Indigo (Premium)
-    accent: Color(0xFFF59E0B), // Amber (Warnings)
+    primary: Color(0xFF10B981),
+    primaryLight: Color(0xFF34D399),
+    primaryDark: Color(0xFF059669),
+    primarySurface: Color(0xFFD1FAE5),
+    secondary: Color(0xFF6366F1),
+    accent: Color(0xFFF59E0B),
   );
 
-  /// Productivity/Task Apps - Blue + Slate
+  // === PRODUCTIVITY (Blue + Slate) ===
   static const productivity = (
-    primary: Color(0xFF3B82F6), // Blue 500
-    primaryLight: Color(0xFF60A5FA), // Blue 400
-    primaryDark: Color(0xFF2563EB), // Blue 600
-    primarySurface: Color(0xFFDBEAFE), // Blue 100
-    secondary: Color(0xFF8B5CF6), // Violet (Premium)
-    accent: Color(0xFFF97316), // Orange (CTA)
+    primary: Color(0xFF3B82F6),
+    primaryLight: Color(0xFF60A5FA),
+    primaryDark: Color(0xFF2563EB),
+    primarySurface: Color(0xFFDBEAFE),
+    secondary: Color(0xFF8B5CF6),
+    accent: Color(0xFFF97316),
   );
 
-  /// Health/Fitness Apps - Teal + Slate
+  // === HEALTH (Teal + Slate) ===
   static const health = (
-    primary: Color(0xFF14B8A6), // Teal 500
-    primaryLight: Color(0xFF2DD4BF), // Teal 400
-    primaryDark: Color(0xFF0D9488), // Teal 600
-    primarySurface: Color(0xFFCCFBF1), // Teal 100
-    secondary: Color(0xFFEC4899), // Pink (Premium)
-    accent: Color(0xFFF59E0B), // Amber (Goals)
+    primary: Color(0xFF14B8A6),
+    primaryLight: Color(0xFF2DD4BF),
+    primaryDark: Color(0xFF0D9488),
+    primarySurface: Color(0xFFCCFBF1),
+    secondary: Color(0xFFEC4899),
+    accent: Color(0xFFF59E0B),
   );
 
-  /// Utility/Tools Apps - Slate + Accent
+  // === UTILITY (Slate) ===
   static const utility = (
-    primary: Color(0xFF475569), // Slate 600
-    primaryLight: Color(0xFF64748B), // Slate 500
-    primaryDark: Color(0xFF334155), // Slate 700
-    primarySurface: Color(0xFFF1F5F9), // Slate 100
-    secondary: Color(0xFF3B82F6), // Blue (Actions)
-    accent: Color(0xFF10B981), // Emerald (Success)
+    primary: Color(0xFF475569),
+    primaryLight: Color(0xFF64748B),
+    primaryDark: Color(0xFF334155),
+    primarySurface: Color(0xFFF1F5F9),
+    secondary: Color(0xFF3B82F6),
+    accent: Color(0xFF10B981),
   );
 
-  /// Gemeinsame Semantic Colors (für alle Schemes)
+  // === SEMANTIC COLORS (alle Schemes) ===
   static const semantic = (
     success: Color(0xFF10B981),
     successLight: Color(0xFFD1FAE5),
@@ -65,7 +61,7 @@ abstract class AppColorSchemes {
     infoLight: Color(0xFFDBEAFE),
   );
 
-  /// Slate Neutral Palette (für alle Schemes)
+  // === SLATE NEUTRAL PALETTE ===
   static const slate = (
     s900: Color(0xFF0F172A),
     s800: Color(0xFF1E293B),
@@ -79,19 +75,19 @@ abstract class AppColorSchemes {
     s50: Color(0xFFF8FAFC),
   );
 
-  /// Kategorie-Farben für Charts (12 Farben)
+  // === CHART COLORS (12) ===
   static const List<Color> chartColors = [
-    Color(0xFF10B981), // Emerald
-    Color(0xFF3B82F6), // Blue
-    Color(0xFFF59E0B), // Amber
-    Color(0xFFEF4444), // Red
-    Color(0xFF8B5CF6), // Violet
-    Color(0xFFEC4899), // Pink
-    Color(0xFF06B6D4), // Cyan
-    Color(0xFFF97316), // Orange
-    Color(0xFF84CC16), // Lime
-    Color(0xFF6366F1), // Indigo
-    Color(0xFF14B8A6), // Teal
-    Color(0xFFA855F7), // Purple
+    Color(0xFF10B981),
+    Color(0xFF3B82F6),
+    Color(0xFFF59E0B),
+    Color(0xFFEF4444),
+    Color(0xFF8B5CF6),
+    Color(0xFFEC4899),
+    Color(0xFF06B6D4),
+    Color(0xFFF97316),
+    Color(0xFF84CC16),
+    Color(0xFF6366F1),
+    Color(0xFF14B8A6),
+    Color(0xFFA855F7),
   ];
 }

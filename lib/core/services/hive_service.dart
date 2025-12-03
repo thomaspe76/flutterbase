@@ -1,72 +1,121 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
-/// Zentraler Service für Hive-Initialisierung und Box-Management.
+/// Zentraler Service für Hive Local Storage.
 ///
-/// Verwendung:
-/// 1. In main.dart: await HiveService.initialize();
-/// 2. Adapter registrieren: HiveService.registerAdapters([MyAdapter()]);
-/// 3. Box öffnen: `await HiveService.openBox<MyModel>('myBox')`
+/// HINWEIS: hive_generator ist nicht kompatibel mit freezed 3.x
+/// TypeAdapter müssen manuell implementiert werden.
+///
+/// Beispiel für manuellen TypeAdapter:
+/// ```dart
+/// class UserModelAdapter extends TypeAdapter<UserModel> {
+///   @override
+///   final int typeId = 0; // Eindeutige ID pro Model
+///
+///   @override
+///   UserModel read(BinaryReader reader) {
+///     return UserModel(
+///       id: reader.readString(),
+///       name: reader.readString(),
+///     );
+///   }
+///
+///   @override
+///   void write(BinaryWriter writer, UserModel obj) {
+///     writer.writeString(obj.id);
+///     writer.writeString(obj.name);
+///   }
+/// }
+/// ```
 class HiveService {
   static const String settingsBox = 'settings';
   static const String cacheBox = 'cache';
 
   static bool _initialized = false;
-  static final List<TypeAdapter> _pendingAdapters = [];
+  static final List<TypeAdapter<dynamic>> _pendingAdapters = [];
 
-  /// Initializes Hive with the given `subDir`.
-  ///
-  /// If `subDir` is not provided, it defaults to 'hive_db'.
-  /// Returns a `Future<void>` when initialization is complete.
+  /// Initialisiert Hive
   static Future<void> initialize() async {
     if (_initialized) return;
 
-    final appDocDir = await getApplicationDocumentsDirectory();
-    await Hive.initFlutter('${appDocDir.path}/hive');
+    try {
+      final appDocDir = await getApplicationDocumentsDirectory();
+      await Hive.initFlutter('${appDocDir.path}/hive_data');
 
-    // Pending Adapter registrieren
-    for (final adapter in _pendingAdapters) {
-      if (!Hive.isAdapterRegistered(adapter.typeId)) {
-        Hive.registerAdapter(adapter);
-      }
-    }
-    _pendingAdapters.clear();
-
-    // Standard-Boxen öffnen
-    await Hive.openBox(settingsBox);
-    await Hive.openBox(cacheBox);
-
-    _initialized = true;
-  }
-
-  /// Registriert Hive-Adapter (vor oder nach initialize() aufrufbar)
-  static void registerAdapters(List<TypeAdapter> adapters) {
-    for (final adapter in adapters) {
-      if (_initialized) {
+      // Registriere wartende Adapter
+      for (final adapter in _pendingAdapters) {
         if (!Hive.isAdapterRegistered(adapter.typeId)) {
           Hive.registerAdapter(adapter);
         }
-      } else {
-        _pendingAdapters.add(adapter);
       }
+      _pendingAdapters.clear();
+
+      // Standard-Boxen öffnen
+      await Hive.openBox<dynamic>(settingsBox);
+      await Hive.openBox<dynamic>(cacheBox);
+
+      _initialized = true;
+      debugPrint('[HiveService] Initialized');
+    } catch (e) {
+      debugPrint('[HiveService] Init failed: $e');
+      rethrow;
+    }
+  }
+
+  /// Registriert TypeAdapter (vor oder nach initialize aufrufbar)
+  static void registerAdapter<T>(TypeAdapter<T> adapter) {
+    if (_initialized) {
+      if (!Hive.isAdapterRegistered(adapter.typeId)) {
+        Hive.registerAdapter(adapter);
+      }
+    } else {
+      _pendingAdapters.add(adapter);
+    }
+  }
+
+  /// Registriert mehrere Adapter
+  static void registerAdapters(List<TypeAdapter<dynamic>> adapters) {
+    for (final adapter in adapters) {
+      registerAdapter(adapter);
     }
   }
 
   /// Öffnet eine typisierte Box
   static Future<Box<T>> openBox<T>(String name) async {
+    if (!_initialized) {
+      throw StateError('HiveService not initialized. Call initialize() first.');
+    }
     if (Hive.isBoxOpen(name)) {
       return Hive.box<T>(name);
     }
-    return await Hive.openBox<T>(name);
+    return Hive.openBox<T>(name);
   }
 
   /// Holt eine bereits geöffnete Box
-  static Box<T> getBox<T>(String name) {
-    return Hive.box<T>(name);
-  }
+  static Box<T> box<T>(String name) => Hive.box<T>(name);
 
   /// Settings-Box Shortcut
-  static Box get settings => Hive.box(settingsBox);
+  static Box<dynamic> get settings => Hive.box<dynamic>(settingsBox);
+
+  /// Cache-Box Shortcut
+  static Box<dynamic> get cache => Hive.box<dynamic>(cacheBox);
+
+  // === SETTINGS HELPER ===
+
+  static T? getSetting<T>(String key, {T? defaultValue}) {
+    return settings.get(key, defaultValue: defaultValue) as T?;
+  }
+
+  static Future<void> setSetting<T>(String key, T value) async {
+    await settings.put(key, value);
+  }
+
+  static Future<void> removeSetting(String key) async {
+    await settings.delete(key);
+  }
+
+  // === LIFECYCLE ===
 
   /// Schließt alle Boxen
   static Future<void> close() async {
@@ -74,13 +123,15 @@ class HiveService {
     _initialized = false;
   }
 
-  /// Löscht alle Daten (für Logout/Reset)
+  /// Löscht alle Daten
   static Future<void> clearAll() async {
-    final boxes = ['settings', 'cache']; // Erweitern nach Bedarf
-    for (final boxName in boxes) {
-      if (Hive.isBoxOpen(boxName)) {
-        await Hive.box(boxName).clear();
-      }
-    }
+    await settings.clear();
+    await cache.clear();
+  }
+
+  /// Löscht Hive komplett vom Dateisystem
+  static Future<void> deleteFromDisk() async {
+    await Hive.deleteFromDisk();
+    _initialized = false;
   }
 }

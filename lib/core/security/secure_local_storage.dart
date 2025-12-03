@@ -1,6 +1,8 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+const String supabasePersistSessionKey = 'SUPABASE_PERSIST_SESSION_KEY';
+
 class SecureLocalStorage extends LocalStorage {
   final FlutterSecureStorage _storage;
 
@@ -27,7 +29,7 @@ class SecureLocalStorage extends LocalStorage {
   @override
   Future<void> persistSession(String persistSessionString) async {
     await _storage.write(
-        key: supabasePersistSessionKey, value: persistSessionString);
+        key: supabasePersistSessionKey, value: persistSessionString,);
   }
 
   @override

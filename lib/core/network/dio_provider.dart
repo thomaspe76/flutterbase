@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../config/env_config.dart';
 
@@ -22,7 +23,7 @@ Dio dio(Ref ref) {
     dio.interceptors.add(LogInterceptor(
       requestBody: true,
       responseBody: true,
-    ));
+    ),);
   }
 
   // Add Auth Interceptor here later

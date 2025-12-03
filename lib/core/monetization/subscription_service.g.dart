@@ -6,48 +6,22 @@ part of 'subscription_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-// GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: type=lint, type=warning
-
-@ProviderFor(SubscriptionService)
-const subscriptionServiceProvider = SubscriptionServiceProvider._();
-
-final class SubscriptionServiceProvider
-    extends $AsyncNotifierProvider<SubscriptionService, bool> {
-  const SubscriptionServiceProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'subscriptionServiceProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
-
-  @override
-  String debugGetCreateSourceHash() => _$subscriptionServiceHash();
-
-  @$internal
-  @override
-  SubscriptionService create() => SubscriptionService();
-}
-
 String _$subscriptionServiceHash() =>
     r'66b7b630e69846faa922067aa447c741ebc8a360';
 
-abstract class _$SubscriptionService extends $AsyncNotifier<bool> {
-  FutureOr<bool> build();
-  @$mustCallSuper
-  @override
-  void runBuild() {
-    final created = build();
-    final ref = this.ref as $Ref<AsyncValue<bool>, bool>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<AsyncValue<bool>, bool>,
-        AsyncValue<bool>,
-        Object?,
-        Object?>;
-    element.handleValue(ref, created);
-  }
-}
+/// See also [SubscriptionService].
+@ProviderFor(SubscriptionService)
+final subscriptionServiceProvider =
+    AsyncNotifierProvider<SubscriptionService, bool>.internal(
+  SubscriptionService.new,
+  name: r'subscriptionServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$subscriptionServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$SubscriptionService = AsyncNotifier<bool>;
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

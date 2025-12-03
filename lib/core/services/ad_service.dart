@@ -2,13 +2,13 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-/// Service für Google AdMob Integration (Banner + Rewarded Video).
+/// Google AdMob Service für Banner, Interstitial und Rewarded Ads.
 ///
 /// Setup:
-/// 1. AdMob Account erstellen und App registrieren
-/// 2. Ad Unit IDs in .env eintragen
-/// 3. AndroidManifest.xml: `<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-XXXX"/>`
-/// 4. iOS Info.plist: GADApplicationIdentifier
+/// 1. AdMob Account + App erstellen
+/// 2. AndroidManifest.xml: `<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-XXXX~YYYY"/>`
+/// 3. iOS Info.plist: GADApplicationIdentifier = ca-app-pub-XXXX~YYYY
+/// 4. In main.dart: await AdService.initialize();
 class AdService {
   static bool _initialized = false;
 
@@ -20,48 +20,51 @@ class AdService {
   bool _isRewardedLoaded = false;
   bool _isInterstitialLoaded = false;
 
-  bool get isBannerAdLoaded => _isBannerLoaded;
-  bool get isRewardedAdLoaded => _isRewardedLoaded;
-  bool get isInterstitialAdLoaded => _isInterstitialLoaded;
+  // Callbacks
+  VoidCallback? onBannerLoaded;
+  VoidCallback? onRewardedLoaded;
+
+  bool get isBannerLoaded => _isBannerLoaded;
+  bool get isRewardedLoaded => _isRewardedLoaded;
+  bool get isInterstitialLoaded => _isInterstitialLoaded;
   BannerAd? get bannerAd => _bannerAd;
 
-  /// Test Ad Unit IDs - für Produktion durch echte IDs ersetzen!
-  final String _bannerAdUnitId;
-  final String _rewardedAdUnitId;
-  final String _interstitialAdUnitId;
+  // Ad Unit IDs (überschreibbar)
+  final String bannerAdUnitId;
+  final String rewardedAdUnitId;
+  final String interstitialAdUnitId;
 
   AdService({
     String? bannerAdUnitId,
     String? rewardedAdUnitId,
     String? interstitialAdUnitId,
-  })  : _bannerAdUnitId = bannerAdUnitId ?? _defaultBannerAdUnitId,
-        _rewardedAdUnitId = rewardedAdUnitId ?? _defaultRewardedAdUnitId,
-        _interstitialAdUnitId =
-            interstitialAdUnitId ?? _defaultInterstitialAdUnitId;
+  })  : bannerAdUnitId = bannerAdUnitId ?? _testBannerAdUnitId,
+        rewardedAdUnitId = rewardedAdUnitId ?? _testRewardedAdUnitId,
+        interstitialAdUnitId =
+            interstitialAdUnitId ?? _testInterstitialAdUnitId;
 
-  // Test Ad Unit IDs (funktionieren in Debug-Builds)
-  static String get _defaultBannerAdUnitId {
+  // === TEST AD UNIT IDS ===
+
+  static String get _testBannerAdUnitId {
     if (Platform.isAndroid) return 'ca-app-pub-3940256099942544/6300978111';
     if (Platform.isIOS) return 'ca-app-pub-3940256099942544/2934735716';
-    throw UnsupportedError('Unsupported platform');
+    return '';
   }
 
-  static String get _defaultRewardedAdUnitId {
+  static String get _testRewardedAdUnitId {
     if (Platform.isAndroid) return 'ca-app-pub-3940256099942544/5224354917';
     if (Platform.isIOS) return 'ca-app-pub-3940256099942544/1712485313';
-    throw UnsupportedError('Unsupported platform');
+    return '';
   }
 
-  static String get _defaultInterstitialAdUnitId {
+  static String get _testInterstitialAdUnitId {
     if (Platform.isAndroid) return 'ca-app-pub-3940256099942544/1033173712';
     if (Platform.isIOS) return 'ca-app-pub-3940256099942544/4411468910';
-    throw UnsupportedError('Unsupported platform');
+    return '';
   }
 
-  /// Initializes the Google Mobile Ads SDK.
-  ///
-  /// This must be called before loading any ads.
-  /// Returns a `Future<void>` that completes when initialization is done.
+  // === INITIALIZATION ===
+
   static Future<void> initialize() async {
     if (_initialized) return;
     await MobileAds.instance.initialize();
@@ -71,39 +74,31 @@ class AdService {
 
   // === BANNER ADS ===
 
-  /// Lädt einen Banner-Ad
-  void loadBannerAd({
-    AdSize size = AdSize.banner,
-    Function()? onLoaded,
-    Function(String error)? onFailed,
-  }) {
+  void loadBannerAd({AdSize size = AdSize.banner}) {
     _bannerAd?.dispose();
     _isBannerLoaded = false;
 
     _bannerAd = BannerAd(
-      adUnitId: _bannerAdUnitId,
+      adUnitId: bannerAdUnitId,
       size: size,
       request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (ad) {
           debugPrint('[AdService] Banner loaded');
           _isBannerLoaded = true;
-          onLoaded?.call();
+          onBannerLoaded?.call();
         },
         onAdFailedToLoad: (ad, error) {
           debugPrint('[AdService] Banner failed: ${error.message}');
           ad.dispose();
           _bannerAd = null;
           _isBannerLoaded = false;
-          onFailed?.call(error.message);
         },
-        onAdClicked: (ad) => debugPrint('[AdService] Banner clicked'),
       ),
     )..load();
   }
 
-  /// Entfernt den Banner
-  void disposeBannerAd() {
+  void disposeBanner() {
     _bannerAd?.dispose();
     _bannerAd = null;
     _isBannerLoaded = false;
@@ -111,20 +106,19 @@ class AdService {
 
   // === REWARDED ADS ===
 
-  /// Lädt einen Rewarded Video Ad (im Voraus laden!)
-  void loadRewardedAd({Function()? onLoaded}) {
+  void loadRewardedAd() {
     RewardedAd.load(
-      adUnitId: _rewardedAdUnitId,
+      adUnitId: rewardedAdUnitId,
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
-          debugPrint('[AdService] Rewarded ad loaded');
+          debugPrint('[AdService] Rewarded loaded');
           _rewardedAd = ad;
           _isRewardedLoaded = true;
-          onLoaded?.call();
+          onRewardedLoaded?.call();
         },
         onAdFailedToLoad: (error) {
-          debugPrint('[AdService] Rewarded ad failed: ${error.message}');
+          debugPrint('[AdService] Rewarded failed: ${error.message}');
           _rewardedAd = null;
           _isRewardedLoaded = false;
         },
@@ -132,11 +126,10 @@ class AdService {
     );
   }
 
-  /// Zeigt Rewarded Video und gibt zurück ob Reward verdient wurde
-  Future<bool> showRewardedAd(
-      {Function(int amount, String type)? onRewarded}) async {
+  /// Zeigt Rewarded Ad. Gibt true zurück wenn Reward verdient wurde.
+  Future<bool> showRewardedAd() async {
     if (_rewardedAd == null) {
-      debugPrint('[AdService] Rewarded ad not loaded');
+      debugPrint('[AdService] Rewarded not loaded');
       return false;
     }
 
@@ -144,14 +137,13 @@ class AdService {
 
     _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
       onAdDismissedFullScreenContent: (ad) {
-        debugPrint('[AdService] Rewarded ad dismissed');
         ad.dispose();
         _rewardedAd = null;
         _isRewardedLoaded = false;
-        loadRewardedAd(); // Nächsten vorladen
+        loadRewardedAd(); // Preload next
       },
       onAdFailedToShowFullScreenContent: (ad, error) {
-        debugPrint('[AdService] Rewarded ad show failed: ${error.message}');
+        debugPrint('[AdService] Rewarded show failed: ${error.message}');
         ad.dispose();
         _rewardedAd = null;
         _isRewardedLoaded = false;
@@ -161,10 +153,8 @@ class AdService {
 
     await _rewardedAd!.show(
       onUserEarnedReward: (ad, reward) {
-        debugPrint(
-            '[AdService] Reward earned: ${reward.amount} ${reward.type}');
+        debugPrint('[AdService] Reward: ${reward.amount} ${reward.type}');
         rewarded = true;
-        onRewarded?.call(reward.amount.toInt(), reward.type);
       },
     );
 
@@ -173,17 +163,15 @@ class AdService {
 
   // === INTERSTITIAL ADS ===
 
-  /// Lädt einen Interstitial Ad
-  void loadInterstitialAd({Function()? onLoaded}) {
+  void loadInterstitialAd() {
     InterstitialAd.load(
-      adUnitId: _interstitialAdUnitId,
+      adUnitId: interstitialAdUnitId,
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
           debugPrint('[AdService] Interstitial loaded');
           _interstitialAd = ad;
           _isInterstitialLoaded = true;
-          onLoaded?.call();
         },
         onAdFailedToLoad: (error) {
           debugPrint('[AdService] Interstitial failed: ${error.message}');
@@ -194,7 +182,6 @@ class AdService {
     );
   }
 
-  /// Zeigt Interstitial Ad
   Future<void> showInterstitialAd() async {
     if (_interstitialAd == null) return;
 
