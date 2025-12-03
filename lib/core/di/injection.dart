@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import '../network/dio_module.dart';
+
 import '../../features/user/data/datasources/user_local_datasource.dart';
 import '../../features/user/data/datasources/user_remote_datasource.dart';
 import '../../features/user/data/repositories/user_repository_impl.dart';
@@ -16,6 +19,7 @@ final sl = GetIt.instance;
 Future<void> initializeDependencies() async {
   // Core
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl());
+  sl.registerLazySingleton<Dio>(() => DioModule.provideDio());
 
   // User Feature
   // Data sources

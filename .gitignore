@@ -93,3 +93,6 @@ lib/generated_plugin_registrant.dart
 
 # Coverage
 coverage/
+
+# Environment
+.env

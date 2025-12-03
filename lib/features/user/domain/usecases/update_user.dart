@@ -16,8 +16,8 @@ class UpdateUser implements UseCase<UserEntity, UpdateUserParams> {
   Future<Either<Failure, UserEntity>> call(UpdateUserParams params) async {
     // Add business logic/validation here if needed
     if (params.user.email.isEmpty) {
-      return Left(
-        const ValidationFailure(message: 'Email cannot be empty'),
+      return const Left(
+        ValidationFailure(message: 'Email cannot be empty'),
       );
     }
 
