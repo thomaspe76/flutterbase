@@ -8,10 +8,12 @@ Diese Dokumentation dient als Leitfaden für KI-Agenten und Entwickler, die auf 
 *   **Sprache:** Dart 3.x
 *   **State Management:** [Riverpod](https://riverpod.dev/) (Annotation Syntax bevorzugt)
 *   **Navigation:** [GoRouter](https://pub.dev/packages/go_router)
-*   **Backend:** Firebase (Auth, Firestore, Crashlytics, Remote Config, Analytics)
+*   **Backend:** Firebase (Auth, Firestore, Crashlytics, Remote Config, Analytics, Dynamic Links, Storage)
 *   **Local Storage:** Hive (⚠️ Besonderheit beachten!)
 *   **Monetarisierung:** RevenueCat (IAP) + Google Mobile Ads (AdMob)
 *   **Growth:** Android Install Referrer + Firebase Dynamic Links
+*   **Charts:** fl_chart (für Datenvisualisierung)
+*   **Audio:** record (für Voice-Features)
 
 ## 2. Kritische Regeln & Constraints ⚠️
 
@@ -24,6 +26,8 @@ Diese Dokumentation dient als Leitfaden für KI-Agenten und Entwickler, die auf 
 ### 🛑 Environment Variables
 *   API-Keys und Secrets dürfen **niemals** hardcoded werden.
 *   Nutze `flutter_dotenv` und die `.env` Datei.
+*   **Template:** Kopiere `.env.example` zu `.env` und fülle die Werte aus.
+*   **Verfügbare Keys:** Siehe `.env.example` für vollständige Liste (AdMob, RevenueCat, Dynamic Links, Gemini AI, Supabase).
 *   Zugriff: `dotenv.env['KEY_NAME']`.
 
 ## 3. Core Services (Deep Dive) 🧠
@@ -158,7 +162,28 @@ Wenn du ein neues Feature implementierst, folge diesem Ablauf:
 ## 6. Deployment Checkliste ✅
 
 Bevor du "fertig" meldest, prüfe:
-1.  [ ] `.env` Datei existiert und enthält valide Keys (kopiert von `.env.example`).
+1.  [ ] `.env` Datei existiert und enthält valide Keys (kopiert von `.env.example` und ausgefüllt).
 2.  [ ] `flutter pub run build_runner build --delete-conflicting-outputs` lief erfolgreich.
-3.  [ ] Keine Lint-Errors im Code.
+3.  [ ] Keine Lint-Errors im Code (`flutter analyze`).
 4.  [ ] `AndroidManifest.xml` und `Info.plist` enthalten die korrekten AdMob App-IDs.
+5.  [ ] Firebase ist konfiguriert (`flutterfire configure`).
+
+## 7. Verfügbare Packages 📦
+
+### Production Dependencies
+- **State & DI:** `flutter_riverpod`, `get_it`, `injectable`
+- **Firebase:** `firebase_core`, `firebase_auth`, `cloud_firestore`, `firebase_analytics`, `firebase_crashlytics`, `firebase_remote_config`, `firebase_dynamic_links`, `firebase_storage`
+- **Network:** `dio`, `retrofit`, `connectivity_plus`
+- **Storage:** `hive`, `hive_flutter`, `path_provider`, `flutter_secure_storage`, `shared_preferences`
+- **Monetization:** `purchases_flutter`, `google_mobile_ads`
+- **Referral:** `android_play_install_referrer`, `share_plus`
+- **Utils:** `freezed_annotation`, `json_annotation`, `equatable`, `fpdart`, `intl`, `logger`, `uuid`, `package_info_plus`, `permission_handler`, `url_launcher`
+- **Audio:** `record` (für Voice-Recording)
+- **Charts:** `fl_chart` (für Datenvisualisierung)
+- **UI:** `flutter_dotenv`, `cached_network_image`, `shimmer`, `flutter_animate`, `google_fonts`
+- **AI:** `google_generative_ai`
+- **Other:** `supabase_flutter`, `in_app_review`, `local_auth`, `flutter_local_notifications`, `accessibility_tools`
+
+### Dev Dependencies
+- **Code Gen:** `build_runner`, `freezed`, `json_serializable`, `riverpod_generator`, `injectable_generator`, `retrofit_generator`
+- **Linting:** `flutter_lints`
