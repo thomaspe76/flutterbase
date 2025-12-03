@@ -122,6 +122,28 @@ Container(
 )
 ```
 
+### `ToastService` (`lib/core/ui/toast_service.dart`)
+Einheitliches Toast/Notification-System für User-Feedback.
+*   **Design:** Moderne, abgerundete Floating-Snackbars (kein Overlay über Navigation).
+*   **Typen:** Success (grün), Error (rot), Warning (gelb), Info (blau).
+*   **Nutzung:**
+    ```dart
+    // Success Toast
+    ToastService.success(context, 'Event erfolgreich erstellt!');
+    
+    // Error Toast
+    ToastService.error(context, 'Fehler beim Speichern');
+    
+    // Mit Action
+    ToastService.show(
+      context,
+      message: 'Element gelöscht',
+      type: ToastType.info,
+      actionLabel: 'RÜCKGÄNGIG',
+      onAction: () => restore(),
+    );
+    ```
+
 ## 5. Workflow für neue Features 🚀
 
 Wenn du ein neues Feature implementierst, folge diesem Ablauf:
