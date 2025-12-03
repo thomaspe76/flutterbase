@@ -91,7 +91,7 @@ class ToastService {
     Duration duration = const Duration(seconds: 3),
   }) {
     show(context,
-        message: message, type: ToastType.success, duration: duration);
+        message: message, type: ToastType.success, duration: duration,);
   }
 
   /// Shortcut für Error-Toast
@@ -119,7 +119,7 @@ class ToastService {
     Duration duration = const Duration(seconds: 3),
   }) {
     show(context,
-        message: message, type: ToastType.warning, duration: duration);
+        message: message, type: ToastType.warning, duration: duration,);
   }
 }
 
